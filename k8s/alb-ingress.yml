@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alb-ingress
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: eks-alb
+    alb.ingress.kubernetes.io/target-type: ip # ip mode is required for sticky sessions to work with Application Load Balancers.
+    alb.ingress.kubernetes.io/scheme: internet-facing
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: simple-service
+            port:
+              number: 80
